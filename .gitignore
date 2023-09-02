@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+#Ignore PPK keys
+git_ssh_key
+git_ssh_key.pub
 
 # C extensions
 *.so
