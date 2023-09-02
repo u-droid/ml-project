@@ -13,6 +13,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 
 from src.utils import save_object
+from src.components.data_ingestion import DataIngestion
 
 @dataclass
 class DataTransformationConfig:
@@ -95,3 +96,9 @@ class DataTransformation:
             return train, test, self.data_transformation_config.preprocessor_obj_file_path
         except Exception as e:
             raise CustomException(e, sys)
+
+if __name__ == '__main__':
+    obj1 = DataIngestion()
+    train_path, test_path = obj1.initiate_data_ingestion()
+    obj2 = DataTransformation()
+    obj2.initiate_data_transformation(train_path, test_path)
