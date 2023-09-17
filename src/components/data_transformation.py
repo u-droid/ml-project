@@ -1,4 +1,4 @@
-import os
+ import os
 import sys
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ from src.components.data_ingestion import DataIngestion
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path=os.path.join('artifacts',"proprocessor.pkl")
+    preprocessor_obj_file_path=os.path.join('artifacts',"preprocessor.pkl")
 
 class DataTransformation:
     def __init__(self) -> None:
@@ -59,7 +59,7 @@ class DataTransformation:
             return preprocessor
         except Exception as e:
             raise CustomException(e, sys)
-        
+
     def initiate_data_transformation(self, train_path, test_path):
         try:
             train_df=pd.read_csv(train_path)
@@ -69,17 +69,17 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing object")
 
-            preprocessing_obj=self.get_data_transformer_object()
+            preprocessing_obj = self.get_data_transformer_object()
 
             target_column_name = "math_score"
-            X_train = train_df.drop(columns=[target_column_name],axis=1)
+            X_train = train_df.drop(columns=[target_column_name], axis=1)
             y_train = train_df[target_column_name]
 
-            X_test = test_df.drop(columns=[target_column_name],axis=1)
+            X_test = test_df.drop(columns=[target_column_name], axis=1)
             y_test = test_df[target_column_name]
 
             X_train_arr = preprocessing_obj.fit_transform(X_train)
-            X_test_arr = preprocessing_obj.fit_transform(X_test)
+            X_test_arr = preprocessing_obj.transform(X_test)
             logging.info(
                 f"Applying preprocessing object on training dataframe and testing dataframe."
             )
@@ -88,10 +88,10 @@ class DataTransformation:
             test = np.c_[X_test_arr, np.array(y_test)]
 
             save_object(
-
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessing_obj
             )
+
             logging.info(f"Saved preprocessing object.")
             return train, test, self.data_transformation_config.preprocessor_obj_file_path
         except Exception as e:
