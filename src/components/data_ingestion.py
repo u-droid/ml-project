@@ -6,6 +6,9 @@ from src.logger import logging
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTrainer
+
 @dataclass
 class DataIngestionConfig:
     train_data_path = os.path.join('artifacts', 'train.csv')
@@ -34,7 +37,15 @@ class DataIngestion:
             raise CustomException(e, sys)
 
 if __name__ == '__main__':
-    obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    ingestion = DataIngestion()
+    train_path, test_path = ingestion.initiate_data_ingestion()
+
+    data_prep = DataTransformation()
+    train, test, preprocessor_obj_file_path = data_prep.initiate_data_transformation(train_path, test_path)
+
+    trainer = ModelTrainer()
+    best_model_score = trainer.initiate_model_trainer()
+    print(f"Best Model R2 Score= {best_model_score}")
+
 
 
