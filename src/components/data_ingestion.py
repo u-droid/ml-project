@@ -44,7 +44,7 @@ if __name__ == '__main__':
     train, test, preprocessor_obj_file_path = data_prep.initiate_data_transformation(train_path, test_path)
 
     trainer = ModelTrainer()
-    best_model_score = trainer.initiate_model_trainer()
+    best_model_score = trainer.initiate_model_trainer(train, test)
     print(f"Best Model R2 Score= {best_model_score}")
 
 
